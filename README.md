@@ -1,1 +1,1 @@
-# terraform-provider-laravel-forge
+# Laravel Forge Terraform Provider
