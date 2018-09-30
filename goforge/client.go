@@ -22,13 +22,7 @@ type Client struct {
 
 	// User agent for client
 	UserAgent string
-
-	// Optional function called after every successful request made to the Forge APIs
-	onRequestCompleted RequestCompletionCallback
 }
-
-// RequestCompletionCallback defines the type of the request callback function
-type RequestCompletionCallback func(*http.Request, *http.Response)
 
 // NewClient returns a new API client.
 func NewClient(httpClient *http.Client) (*Client, error) {
@@ -41,9 +35,4 @@ func NewClient(httpClient *http.Client) (*Client, error) {
 	c := &Client{client: httpClient, BaseURL: baseURL, UserAgent: userAgent}
 
 	return c, nil
-}
-
-// OnRequestCompleted sets the Forge API request completion callback
-func (c *Client) OnRequestCompleted(rc RequestCompletionCallback) {
-	c.onRequestCompleted = rc
 }
