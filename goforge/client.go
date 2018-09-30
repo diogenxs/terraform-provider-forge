@@ -9,7 +9,7 @@ const (
 	libraryVersion = "1.0.0"
 	userAgent      = "goforge/" + libraryVersion
 	mediaType      = "application/json"
-	defaultBaseURL = "https://forge.laravel.com/v1"
+	defaultBaseURL = "https://forge.laravel.com"
 )
 
 // Client enables communication with the Laravel Forge API
