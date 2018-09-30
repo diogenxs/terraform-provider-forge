@@ -1,6 +1,7 @@
 package goforge
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -40,11 +41,19 @@ func NewClient(httpClient *http.Client) (*Client, error) {
 }
 
 // NewRequest returns a new pre-configured HTTP Request
-func (c *Client) NewRequest(path string) (*http.Request, error) {
+func (c *Client) NewRequest(method string, path string, body interface{}) (*http.Request, error) {
 	rel := &url.URL{Path: path}
 	u := c.BaseURL.ResolveReference(rel)
 
-	req, err := http.NewRequest("GET", u.String(), nil)
+	buf := new(bytes.Buffer)
+	if body != nil {
+		err := json.NewEncoder(buf).Encode(body)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	req, err := http.NewRequest(method, u.String(), buf)
 	if err != nil {
 		return nil, err
 	}
