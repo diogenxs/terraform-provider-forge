@@ -2,6 +2,7 @@ package goforge
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/url"
 )
@@ -52,6 +53,13 @@ func (c *Client) NewRequest(path string) (*http.Request, error) {
 	req.Header.Set("User-Agent", c.UserAgent)
 
 	return req, nil
+}
+
+// Do performs a request and returns the response
+func (c *Client) SetUserAgent(ua string) error {
+	c.UserAgent = fmt.Sprintf("%s %s", ua, c.UserAgent)
+
+	return nil
 }
 
 // Do performs a request and returns the response

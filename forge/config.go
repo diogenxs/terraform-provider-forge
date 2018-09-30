@@ -1,11 +1,13 @@
 package forge
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"net/http/httputil"
 
 	"github.com/hashicorp/terraform/helper/logging"
+	"github.com/hashicorp/terraform/terraform"
 	"github.com/pittfit/terraform-provider-forge/goforge"
 	"golang.org/x/oauth2"
 )
@@ -20,15 +22,20 @@ func (c *Config) Client() (*goforge.Client, error) {
 		AccessToken: c.Token,
 	})
 
-	// userAgent := fmt.Sprintf("Terraform/%s", terraform.VersionString())
-
 	client, err := goforge.NewClient(oauth2.NewClient(oauth2.NoContext, tokenSrc))
 	if err != nil {
 		return nil, err
 	}
 
+	userAgent := fmt.Sprintf("Terraform/%s", terraform.VersionString())
+
+	err = client.SetUserAgent(userAgent)
+	if err != nil {
+		return nil, err
+	}
+
 	if logging.IsDebugOrHigher() {
-		client.OnRequestCompleted(logRequestAndResponse)
+		// client.OnRequestCompleted(logRequestAndResponse)
 	}
 
 	log.Printf("[INFO] Laravel Forge Client configured for URL: %s", client.BaseURL.String())
