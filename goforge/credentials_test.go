@@ -3,8 +3,6 @@ package goforge
 import (
 	"io"
 	"net/http"
-	"net/http/httptest"
-	"net/url"
 	"reflect"
 	"testing"
 )
@@ -19,7 +17,7 @@ func TestCredentialsList(t *testing.T) {
 
 	defer ts.Close()
 
-	creds, err := client.CredentialsList()
+	result, err := client.CredentialsList()
 	if err != nil {
 		t.Errorf("Error getting credentials: %v", err)
 	}
@@ -28,28 +26,9 @@ func TestCredentialsList(t *testing.T) {
 		Credential{ID: 1, Type: "test", Name: "Personal"},
 	}
 
-	if !reflect.DeepEqual(creds, expected) {
-		t.Errorf("CredentialsList returned %+v, expected %+v", creds, expected)
+	if !reflect.DeepEqual(result, expected) {
+		t.Errorf("CredentialsList returned %+v, expected %+v", result, expected)
 	}
-}
-
-func createTestClient(handler http.Handler) (*Client, *httptest.Server, error) {
-	client, err := NewClient(nil)
-
-	if err != nil {
-		return nil, nil, err
-	}
-
-	ts := httptest.NewServer(handler)
-	client.BaseURL, err = url.Parse(ts.URL)
-
-	if err != nil {
-		ts.Close()
-
-		return nil, nil, err
-	}
-
-	return client, ts, nil
 }
 
 func CredentialsListSuccessfulResponse(t *testing.T) http.Handler {
