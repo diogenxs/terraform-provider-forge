@@ -58,8 +58,9 @@ func (c *Client) NewRequest(method string, path string, body interface{}) (*http
 		return nil, err
 	}
 
-	req.Header.Set("Accept", mediaType)
-	req.Header.Set("User-Agent", c.UserAgent)
+	req.Header.Add("Accept", mediaType)
+	req.Header.Add("Content-Type", mediaType)
+	req.Header.Add("User-Agent", c.UserAgent)
 
 	return req, nil
 }
