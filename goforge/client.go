@@ -1,6 +1,7 @@
 package goforge
 
 import (
+	"encoding/json"
 	"net/http"
 	"net/url"
 )
@@ -35,4 +36,43 @@ func NewClient(httpClient *http.Client) (*Client, error) {
 	c := &Client{client: httpClient, BaseURL: baseURL, UserAgent: userAgent}
 
 	return c, nil
+}
+
+// NewRequest returns a new pre-configured HTTP Request
+func (c *Client) NewRequest(path string) (*http.Request, error) {
+	rel := &url.URL{Path: path}
+	u := c.BaseURL.ResolveReference(rel)
+
+	req, err := http.NewRequest("GET", u.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Set("Accept", mediaType)
+	req.Header.Set("User-Agent", c.UserAgent)
+
+	return req, nil
+}
+
+// Do performs a request and returns the response
+func (c *Client) Do(req *http.Request) (*http.Response, error) {
+	resp, err := c.client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, nil
+}
+
+// Do performs a request and returns the response
+func (c *Client) DoJSON(req *http.Request, v interface{}) (*http.Response, error) {
+	resp, err := c.Do(req)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer resp.Body.Close()
+
+	return resp, json.NewDecoder(resp.Body).Decode(&v)
 }
