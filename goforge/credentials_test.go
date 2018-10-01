@@ -9,15 +9,12 @@ import (
 
 // testCredentialsList
 func TestCredentialsList(t *testing.T) {
-	client, ts, err := createTestClient(CredentialsListSuccessfulResponse(t))
+	tc := SetUpTestClient(t)
+	defer tc.TearDown()
 
-	if err != nil {
-		t.Errorf("Unable to create test client: %v", err)
-	}
+	tc.Server.Mux.Handle("/api/v1/credentials", CredentialsListSuccessfulResponse(t))
 
-	defer ts.Close()
-
-	result, err := client.CredentialsList()
+	result, err := tc.Client.CredentialsList()
 	if err != nil {
 		t.Errorf("Error getting credentials: %v", err)
 	}

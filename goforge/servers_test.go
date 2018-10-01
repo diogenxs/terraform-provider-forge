@@ -9,15 +9,12 @@ import (
 
 // testServersList
 func TestServersList(t *testing.T) {
-	client, ts, err := createTestClient(ServersListSuccessfulResponse(t))
+	tc := SetUpTestClient(t)
+	defer tc.TearDown()
 
-	if err != nil {
-		t.Errorf("Unable to create test client: %v", err)
-	}
+	tc.Server.Mux.Handle("/api/v1/servers", ServersListSuccessfulResponse(t))
 
-	defer ts.Close()
-
-	result, err := client.ServersList()
+	result, err := tc.Client.ServersList()
 	if err != nil {
 		t.Errorf("Error getting credentials: %v", err)
 	}
