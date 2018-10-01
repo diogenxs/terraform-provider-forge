@@ -9,10 +9,11 @@ import (
 )
 
 const (
-	libraryVersion = "1.0.0"
-	userAgent      = "goforge/" + libraryVersion
-	mediaType      = "application/json"
-	defaultBaseURL = "https://forge.laravel.com"
+	libraryVersion   = "1.0.0"
+	defaultUserAgent = "goforge/" + libraryVersion
+	defaultBaseURL   = "https://forge.laravel.com"
+
+	mediaType = "application/json"
 )
 
 // Client enables communication with the Laravel Forge API
@@ -35,7 +36,7 @@ func NewClient(httpClient *http.Client) (*Client, error) {
 
 	baseURL, _ := url.Parse(defaultBaseURL)
 
-	c := &Client{client: httpClient, BaseURL: baseURL, UserAgent: userAgent}
+	c := &Client{client: httpClient, BaseURL: baseURL, UserAgent: defaultUserAgent}
 
 	return c, nil
 }
@@ -65,7 +66,7 @@ func (c *Client) NewRequest(method string, path string, body interface{}) (*http
 	return req, nil
 }
 
-// Do performs a request and returns the response
+// SetUserAgent adds an additional user agent string to all requests
 func (c *Client) SetUserAgent(ua string) error {
 	c.UserAgent = fmt.Sprintf("%s %s", ua, c.UserAgent)
 
@@ -82,7 +83,7 @@ func (c *Client) Do(req *http.Request) (*http.Response, error) {
 	return resp, nil
 }
 
-// Do performs a request and returns the response
+// DoJSON performs a request and returns the response
 func (c *Client) DoJSON(req *http.Request, v interface{}) (*http.Response, error) {
 	resp, err := c.Do(req)
 
