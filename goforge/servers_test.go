@@ -31,6 +31,7 @@ func TestServersList(t *testing.T) {
 func ServersListSuccessfulResponse(t *testing.T) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		testMethod(t, r, "GET")
+		testCommonHeaders(t, r)
 
 		w.WriteHeader(http.StatusOK)
 		w.Header().Set("Content-Type", "application/json")

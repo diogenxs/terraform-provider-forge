@@ -75,3 +75,16 @@ func testMethod(t *testing.T, r *http.Request, want string) {
 		t.Errorf("Request METHOD expected to be `%v`, got `%v`", want, got)
 	}
 }
+
+func testHeader(t *testing.T, r *http.Request, name, want string) {
+	if got := r.Header.Get(name); want != got {
+		t.Errorf("Request() %v expected to be `%#v`, got `%#v`", name, want, got)
+	}
+}
+
+func testCommonHeaders(t *testing.T, r *http.Request) {
+	testHeader(t, r, "User-Agent", "goforge/1.0.0")
+
+	testHeader(t, r, "Accept", "application/json")
+	testHeader(t, r, "Content-Type", "application/json")
+}
