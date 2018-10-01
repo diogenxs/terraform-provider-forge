@@ -30,13 +30,7 @@ func TestCredentialsList(t *testing.T) {
 
 func CredentialsListSuccessfulResponse(t *testing.T) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != "GET" {
-			t.Errorf("Expected GET request, got ‘%s’", r.Method)
-		}
-
-		if r.URL.EscapedPath() != "/api/v1/credentials" {
-			t.Errorf("Expected request to ‘/api/v1/credentials, got ‘%s’", r.URL.EscapedPath())
-		}
+		testMethod(t, r, "GET")
 
 		w.WriteHeader(http.StatusOK)
 		w.Header().Set("Content-Type", "application/json")

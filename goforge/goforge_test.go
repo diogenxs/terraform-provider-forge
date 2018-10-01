@@ -69,3 +69,9 @@ func SetUpTestClient(t *testing.T) *TestClient {
 
 	return client
 }
+
+func testMethod(t *testing.T, r *http.Request, want string) {
+	if got := r.Method; want != got {
+		t.Errorf("Request METHOD expected to be `%v`, got `%v`", want, got)
+	}
+}
