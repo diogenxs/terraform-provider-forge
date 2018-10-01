@@ -95,3 +95,20 @@ func (c *Client) DoJSON(req *http.Request, v interface{}) (*http.Response, error
 
 	return resp, json.NewDecoder(resp.Body).Decode(&v)
 }
+
+// DoJSONRequest is a convenience method
+func (c *Client) DoJSONRequest(method string, path string, body interface{}, v interface{}) (*http.Response, error) {
+	req, err := c.NewRequest("GET", "/api/v1/servers", nil)
+
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := c.DoJSON(req, &v)
+
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, nil
+}

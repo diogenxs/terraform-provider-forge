@@ -16,13 +16,7 @@ type CredentialsListResponse struct {
 func (c *Client) CredentialsList() ([]Credential, error) {
 	var r CredentialsListResponse
 
-	req, err := c.NewRequest("GET", "/api/v1/credentials", nil)
-
-	if err != nil {
-		return nil, err
-	}
-
-	_, err = c.DoJSON(req, &r)
+	_, err := c.DoJSONRequest("GET", "/api/v1/credentials", nil, &r)
 
 	if err != nil {
 		return nil, err
