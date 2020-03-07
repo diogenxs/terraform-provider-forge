@@ -12,7 +12,7 @@ func TestServersList(t *testing.T) {
 	tc := SetUpTestClient(t)
 	defer tc.TearDown()
 
-	tc.Server.Mux.Handle("/api/v1/servers", ServersListSuccessfulResponse(t))
+	tc.Server.Mux.Handle("/servers", ServersListSuccessfulResponse(t))
 
 	result, err := tc.Client.ServersList()
 	if err != nil {

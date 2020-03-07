@@ -12,7 +12,7 @@ func TestCredentialsList(t *testing.T) {
 	tc := SetUpTestClient(t)
 	defer tc.TearDown()
 
-	tc.Server.Mux.Handle("/api/v1/credentials", CredentialsListSuccessfulResponse(t))
+	tc.Server.Mux.Handle("/credentials", CredentialsListSuccessfulResponse(t))
 
 	result, err := tc.Client.CredentialsList()
 	if err != nil {

@@ -18,7 +18,7 @@ type ServersListResponse struct {
 func (c *Client) ServersList() ([]Server, error) {
 	var r ServersListResponse
 
-	_, err := c.DoJSONRequest("GET", "/api/v1/servers", nil, &r)
+	_, err := c.DoJSONRequest("GET", "/servers", nil, &r)
 
 	if err != nil {
 		return nil, err

@@ -11,7 +11,7 @@ import (
 const (
 	libraryVersion   = "1.0.0"
 	defaultUserAgent = "goforge/" + libraryVersion
-	defaultBaseURL   = "https://forge.laravel.com"
+	defaultBaseURL   = "https://forge.laravel.com/api/v1"
 
 	mediaType = "application/json"
 )
@@ -43,7 +43,7 @@ func NewClient(httpClient *http.Client) (*Client, error) {
 
 // NewRequest returns a new pre-configured HTTP Request
 func (c *Client) NewRequest(method string, path string, body interface{}) (*http.Request, error) {
-	rel := &url.URL{Path: path}
+	rel := &url.URL{Path: c.BaseURL.Path + path}
 	u := c.BaseURL.ResolveReference(rel)
 
 	buf := new(bytes.Buffer)
@@ -80,6 +80,10 @@ func (c *Client) Do(req *http.Request) (*http.Response, error) {
 		return nil, err
 	}
 
+	if err := checkResponse(resp); err != nil {
+		return nil, err
+	}
+
 	return resp, nil
 }
 
@@ -90,7 +94,6 @@ func (c *Client) DoJSON(req *http.Request, v interface{}) (*http.Response, error
 	if err != nil {
 		return nil, err
 	}
-
 	defer resp.Body.Close()
 
 	return resp, json.NewDecoder(resp.Body).Decode(&v)
@@ -98,7 +101,7 @@ func (c *Client) DoJSON(req *http.Request, v interface{}) (*http.Response, error
 
 // DoJSONRequest is a convenience method
 func (c *Client) DoJSONRequest(method string, path string, body interface{}, v interface{}) (*http.Response, error) {
-	req, err := c.NewRequest("GET", "/api/v1/servers", nil)
+	req, err := c.NewRequest(method, path, body)
 
 	if err != nil {
 		return nil, err
@@ -111,4 +114,11 @@ func (c *Client) DoJSONRequest(method string, path string, body interface{}, v i
 	}
 
 	return resp, nil
+}
+
+func checkResponse(r *http.Response) error {
+	if r.StatusCode < 200 || r.StatusCode > 299 {
+		return fmt.Errorf("Request got status code %d", r.StatusCode)
+	}
+	return nil
 }
