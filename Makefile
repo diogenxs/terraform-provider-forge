@@ -7,4 +7,3 @@ build:
 test: build
 	terraform init
 	terraform plan
-	terraform apply
