@@ -1,9 +1,9 @@
 package main
 
 import (
+	"github.com/diogenxs/terraform-provider-forge/forge"
 	"github.com/hashicorp/terraform/plugin"
 	"github.com/hashicorp/terraform/terraform"
-	"github.com/pittfit/terraform-provider-forge/forge"
 )
 
 func main() {

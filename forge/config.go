@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"net/http/httputil"
 
+	"github.com/diogenxs/terraform-provider-forge/goforge"
 	"github.com/hashicorp/terraform/helper/logging"
 	"github.com/hashicorp/terraform/terraform"
-	"github.com/pittfit/terraform-provider-forge/goforge"
 	"golang.org/x/oauth2"
 )
 
