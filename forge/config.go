@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"net/http/httputil"
 
 	"github.com/diogenxs/terraform-provider-forge/goforge"
 	"github.com/hashicorp/terraform/helper/logging"
@@ -22,7 +21,15 @@ func (c *Config) Client() (*goforge.Client, error) {
 		AccessToken: c.Token,
 	})
 
-	client, err := goforge.NewClient(oauth2.NewClient(oauth2.NoContext, tokenSrc))
+	oauthTransport := &oauth2.Transport{
+		Source: tokenSrc,
+	}
+	loggingTransport := logging.NewTransport("Forge", oauthTransport)
+	oauth2Client := &http.Client{
+		Transport: loggingTransport,
+	}
+
+	client, err := goforge.NewClient(oauth2Client)
 	if err != nil {
 		return nil, err
 	}
@@ -34,37 +41,7 @@ func (c *Config) Client() (*goforge.Client, error) {
 		return nil, err
 	}
 
-	if logging.IsDebugOrHigher() {
-		// client.OnRequestCompleted(logRequestAndResponse)
-	}
-
 	log.Printf("[INFO] Laravel Forge Client configured for URL: %s", client.BaseURL.String())
 
 	return client, nil
 }
-
-func logRequestAndResponse(req *http.Request, resp *http.Response) {
-	reqData, err := httputil.DumpRequest(req, true)
-	if err == nil {
-		log.Printf("[DEBUG] "+logRequestMessage, string(reqData))
-	} else {
-		log.Printf("[ERROR] Laravel Forge API Request error: %#v", err)
-	}
-
-	respData, err := httputil.DumpResponse(resp, true)
-	if err == nil {
-		log.Printf("[DEBUG] "+logResponseMessage, string(respData))
-	} else {
-		log.Printf("[ERROR] Laravel Forge API Response error: %#v", err)
-	}
-}
-
-const logRequestMessage = `Laravel Forge API Request Details:
----[ REQUEST ]---------------------------------------
-%s
------------------------------------------------------`
-
-const logResponseMessage = `Laravel Forge API Response Details:
----[ RESPONSE ]--------------------------------------
-%s
------------------------------------------------------`
