@@ -17,6 +17,7 @@ func Provider() *schema.Provider {
 
 		DataSourcesMap: map[string]*schema.Resource{
 			"forge_credential": dataSourceCredentials(),
+			"forge_server":     dataSourceServer(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			"forge_server": resourceServer(),

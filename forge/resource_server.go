@@ -65,6 +65,12 @@ func resourceServer() *schema.Resource {
 				Optional:    true,
 				Description: "An array of tags applied to this object. Tags are for organizational purposes only.",
 			},
+			"network": {
+				Type:        schema.TypeSet,
+				Elem:        &schema.Schema{Type: schema.TypeInt},
+				Optional:    true,
+				Description: "An array of servers ID's that this server could connect, need to be in the same platform/region.",
+			},
 		},
 	}
 }
@@ -99,6 +105,7 @@ func resourceServerRead(d *schema.ResourceData, m interface{}) error {
 	d.Set("revoked", server.Revoked)
 	d.Set("is_ready", server.IsReady)
 	d.Set("tags", server.Tags)
+	d.Set("tags", server.Network)
 
 	return nil
 }

@@ -24,6 +24,7 @@ type Server struct {
 	IsReady          bool     `json:"is_ready"`
 	SSHPort          int      `json:"ssh_port"`
 	Tags             []string `json:"tags"`
+	Network          []int    `json:"network"`
 }
 
 // ServersListResponse
