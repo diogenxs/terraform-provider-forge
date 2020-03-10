@@ -1,7 +1,6 @@
 package goforge
 
 import (
-	"io"
 	"net/http"
 	"reflect"
 	"testing"
@@ -29,15 +28,7 @@ func TestListCredentials(t *testing.T) {
 }
 
 func CredentialsListSuccessfulResponse(t *testing.T) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		testMethod(t, r, "GET")
-		testCommonHeaders(t, r)
-
-		w.WriteHeader(http.StatusOK)
-		w.Header().Set("Content-Type", "application/json")
-
-		io.WriteString(w, `{"credentials":[{"id":1,"type":"test","name":"Personal"}]}`)
-	})
+	return respondJsonWithStringBody(t, "GET", `{"credentials":[{"id":1,"type":"test","name":"Personal"}]}`)
 }
 
 func TestGetCredentialByID(t *testing.T) {

@@ -1,6 +1,7 @@
 package goforge
 
 import (
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -87,4 +88,16 @@ func testCommonHeaders(t *testing.T, r *http.Request) {
 
 	testHeader(t, r, "Accept", "application/json")
 	testHeader(t, r, "Content-Type", "application/json")
+}
+
+func respondJsonWithStringBody(t *testing.T, method string, body string) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		testMethod(t, r, method)
+		testCommonHeaders(t, r)
+
+		w.WriteHeader(http.StatusOK)
+		w.Header().Set("Content-Type", "application/json")
+
+		io.WriteString(w, body)
+	})
 }
