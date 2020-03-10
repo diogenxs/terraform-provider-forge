@@ -65,7 +65,7 @@ func TestGetServerByID(t *testing.T) {
 		t.Errorf("Error getting credentials: %v", err)
 	}
 
-	expected := testServerExpected
+	expected := &testServerExpected
 
 	if !reflect.DeepEqual(result, expected) {
 		t.Errorf("ServersList returned %+v, expected %+v", result, expected)
