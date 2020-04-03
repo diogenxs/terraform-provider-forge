@@ -3,7 +3,7 @@
 
 ## Examples
 
-```
+```hcl
 provider "forge" {
   token = "your_api_key"
 }

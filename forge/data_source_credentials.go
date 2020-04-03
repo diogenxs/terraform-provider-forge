@@ -49,7 +49,7 @@ func dataSourceCredentialsRead(d *schema.ResourceData, m interface{}) error {
 	if credential != nil {
 		d.SetId(strconv.Itoa(credential.ID))
 		d.Set("name", credential.Name)
-		d.Set("provider", credential.Type)
+		d.Set("platform", credential.Type)
 		return nil
 	}
 

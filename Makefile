@@ -6,4 +6,4 @@ build:
 
 test: build
 	terraform init
-	terraform plan
+	terraform plan -out plan
